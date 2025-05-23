@@ -9,7 +9,7 @@ import tempfile
 import shutil
 from unittest.mock import MagicMock, patch
 
-from analysis import analyze_overfitting, calculate_class_weights
+from tests.analysis import analyze_overfitting, calculate_class_weights
 
 class TestAnalysisFunctions(unittest.TestCase):
     def test_analyze_overfitting(self):
