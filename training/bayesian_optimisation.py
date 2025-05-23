@@ -5,7 +5,7 @@ import optuna
 from datetime import datetime
 from sklearn.model_selection import StratifiedKFold
 
-from training import train_edge_gnn
+from training.training import train_edge_gnn
 from utils.dataset import GraphDataset
 from utils.config import get_parser
 
