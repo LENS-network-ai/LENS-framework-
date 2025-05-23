@@ -19,7 +19,7 @@ from tqdm import tqdm
 
 # Import your existing modules
 from utils.dataset import GraphDataset
-from LENS import ImprovedEdgeGNN
+from model.LENS import ImprovedEdgeGNN
 from helper import Evaluator, collate, preparefeatureLabel
 
 def save_weighted_adjacencies(weighted_adjs, sample_ids, output_dir):
