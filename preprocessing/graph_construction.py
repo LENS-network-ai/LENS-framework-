@@ -1,4 +1,4 @@
-import cl as cl
+import .cl as cl
 
 import torch
 import torch.nn as nn
