@@ -5,7 +5,7 @@ import gc
 import numpy as np
 from torch.utils.data import DataLoader
 
-from analysis import analyze_overfitting, plot_metrics, calculate_class_weights
+from tests.analysis import analyze_overfitting, plot_metrics, calculate_class_weights
 from .training_loop import train_and_evaluate
 from helper import collate
 from utils.lr_scheduler import LR_Scheduler
