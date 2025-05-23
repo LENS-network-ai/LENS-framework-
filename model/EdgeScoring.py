@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from L0Utils import l0_train, l0_test, L0RegularizerParams
+from .L0Utils import l0_train, l0_test, L0RegularizerParams
 
 class EdgeScoringNetwork(nn.Module):
     def __init__(self, feature_dim, edge_dim, dropout=0.2, l0_params=None):
