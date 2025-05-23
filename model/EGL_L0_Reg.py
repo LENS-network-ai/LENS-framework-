@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from L0Utils import get_loss2, L0RegularizerParams
+from .L0Utils import get_loss2, L0RegularizerParams
 
 class EGLassoRegularization:
     def __init__(self, lambda_reg, reg_mode='l0', warmup_epochs=5, l0_params=None):
