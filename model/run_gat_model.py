@@ -7,11 +7,11 @@ import argparse
 from datetime import datetime
 from torch.utils.data import DataLoader
 
-from LENSwithGAT import LENSWithGAT
+from .LENSwithGAT import LENSWithGAT
 from helper import collate
 from utils.dataset import GraphDataset  # Your existing dataset class
 from utils.config import get_parser
-from training_loop import train_and_evaluate
+from training.training_loop import train_and_evaluate
 from utils.lr_scheduler import LR_Scheduler  # Your existing LR scheduler
 
 def main():
