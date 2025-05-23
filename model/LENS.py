@@ -3,11 +3,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils import spectral_norm
 
-from EGL_L0_Reg import EGLassoRegularization
+from .EGL_L0_Reg import EGLassoRegularization
 from .EdgeScoring import EdgeScoringNetwork
 from .GraphPooling import EdgeWeightedAttentionPooling
-from StatsTracker import StatsTracker
-from L0Utils import l0_train, l0_test, L0RegularizerParams  # Import L0 utilities with params
+from .StatsTracker import StatsTracker
+from .L0Utils import l0_train, l0_test, L0RegularizerParams  # Import L0 utilities with params
 
 class ImprovedEdgeGNN(nn.Module):
     def __init__(self, feature_dim, hidden_dim, num_classes, lambda_reg=0.01, reg_mode='l0', edge_dim=32,
