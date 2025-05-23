@@ -3,11 +3,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.utils import spectral_norm
 
-from EGLasso_Reg import EGLassoRegularization
-from EdgeScoring import EdgeScoringNetwork
-from GraphPooling import EdgeWeightedAttentionPooling
-from StatsTracker import StatsTracker
-from GATLayer import MultiLayerGAT
+from .EGLasso_Reg import EGLassoRegularization
+from .EdgeScoring import EdgeScoringNetwork
+from .GraphPooling import EdgeWeightedAttentionPooling
+from .StatsTracker import StatsTracker
+from .GATLayer import MultiLayerGAT
 
 class LENSWithGAT(nn.Module):
     def __init__(self, feature_dim, hidden_dim, num_classes, beta=0.01, egl_mode='egl', edge_dim=32,
