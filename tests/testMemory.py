@@ -22,7 +22,7 @@ from tqdm import tqdm
 
 # Import your existing modules
 from utils.dataset import GraphDataset
-from LENS import ImprovedEdgeGNN
+from model.LENS import ImprovedEdgeGNN
 from helper import Evaluator, collate, preparefeatureLabel
 
 def bootstrap_roc_pr_analysis(y_true, y_score_probs, n_bootstrap=10000, confidence_level=0.95):
