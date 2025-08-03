@@ -17,7 +17,7 @@ from utils.config import get_parser
 def run_bayesian_optimization(args):
     """Run Bayesian optimization to find optimal parameters"""
     print("\n" + "="*60)
-    print("🔍 STARTING BAYESIAN OPTIMIZATION")
+    print(" STARTING BAYESIAN OPTIMIZATION")
     print("="*60)
     print(f"Target sparsity: {args.target_sparsity}")
     print(f"Sparsity penalty weight: {args.sparsity_penalty}")
@@ -128,7 +128,7 @@ def run_bayesian_optimization(args):
             f.write(f"  Sparsity Penalty: {args.sparsity_penalty * abs(mean_sparsity - args.target_sparsity):.4f}\n")
             f.write(f"  Objective Value: {objective_value:.4f}\n")
         
-        print(f"\n👉 Trial {trial.number} finished with objective value: {objective_value:.4f}")
+        print(f"\n Trial {trial.number} finished with objective value: {objective_value:.4f}")
         print(f"   Accuracy: {mean_acc:.4f}, Sparsity: {mean_sparsity:.4f}, Target: {args.target_sparsity:.4f}")
         
         return objective_value
@@ -143,7 +143,7 @@ def run_bayesian_optimization(args):
     
     # Print and save results
     print("\n" + "="*60)
-    print("🏆 BAYESIAN OPTIMIZATION RESULTS")
+    print("BAYESIAN OPTIMIZATION RESULTS")
     print("="*60)
     print(f"Best λ value: {best_params['lambda_reg']:.6f}")
     print(f"Best warmup_epochs: {best_params['warmup_epochs']}")
@@ -232,7 +232,7 @@ def run_standard_training(args):
     fold_results = {}
     
     for fold, (train_idx, val_idx) in enumerate(skf.split(np.zeros(len(dataset)), all_labels)):
-        print(f"\n🔹 Fold {fold+1}/{args.n_folds}")
+        print(f"\n Fold {fold+1}/{args.n_folds}")
         fold_dir = os.path.join(args.output_dir, f"fold{fold+1}")
         os.makedirs(fold_dir, exist_ok=True)
         
@@ -352,34 +352,34 @@ def print_cv_summary(avg_acc, std_acc, avg_sparsity, fold_results, args,
     # Calculate average sparsity across folds
     if avg_sparsity is not None:
         if avg_sparsity < 5.0:
-            print("⚠️ Your model is pruning too aggressively:")
+            print(" Your model is pruning too aggressively:")
             print(f"- Only {avg_sparsity:.1f}% of edges have weight > 0.1")
             print(f"- Consider decreasing {reg_param_name.lower()} or increasing warmup epochs")
             if reg_mode_value == 'l0':
                 print("- Try adjusting L0 parameters (increase beta_l0, decrease gamma)")
         elif avg_sparsity > 50.0:
-            print("⚠️ Your model is not pruning enough:")
+            print(" Your model is not pruning enough:")
             print(f"- {avg_sparsity:.1f}% of edges have weight > 0.1")
             print(f"- Consider increasing {reg_param_name.lower()}")
             if reg_mode_value == 'l0':
                 print("- Try adjusting L0 parameters (decrease beta_l0)")
         else:
-            print(f"✅ Edge sparsity looks good: {avg_sparsity:.1f}% of edges have weight > 0.1")
+            print(f" Edge sparsity looks good: {avg_sparsity:.1f}% of edges have weight > 0.1")
     
     if avg_gap > 0.2:
-        print("⚠️ Your model shows significant overfitting across folds:")
+        print(" Your model shows significant overfitting across folds:")
         print("- Try increasing dropout to 0.3-0.4")
         print("- Consider increasing weight decay to 5e-4")
         print("- Try decreasing the edge dimension")
     elif avg_gap > 0.1:
-        print("⚠️ Your model shows moderate overfitting:")
+        print(" Your model shows moderate overfitting:")
         print("- Consider increasing dropout slightly")
         print("- Try different regularization modes")
     else:
-        print("✅ Your model shows good generalization!")
+        print(" Your model shows good generalization!")
     
     # Output analysis location
-    print(f"\n📊 Detailed graph analysis and reports can be found in:")
+    print(f"\n Detailed graph analysis and reports can be found in:")
     print(f"   {args.output_dir}")
 
 def main():
@@ -391,7 +391,7 @@ def main():
     if args.run_bayesian_opt:
         # Run Bayesian optimization
         best_params, best_value, output_dir = run_bayesian_optimization(args)
-        print(f"\n🚀 Bayesian optimization complete! Best parameters saved to {output_dir}")
+        print(f"\n Bayesian optimization complete! Best parameters saved to {output_dir}")
     else:
         # Run standard cross-validation training
         run_standard_training(args)
