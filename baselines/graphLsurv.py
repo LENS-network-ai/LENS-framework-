@@ -1,6 +1,5 @@
 """
-GraphLSurv model adapted for 3-class classification (normal, luad, lscc).
-Adapted from original survival prediction to work with LENS dataset structure.
+GraphLSurv model adapted for 3-class classification.
 """
 
 import torch
@@ -200,16 +199,13 @@ class AnchorGCN(nn.Module):
 
 class GraphLSurv(torch.nn.Module):
     """
-    GraphLSurv adapted for 3-class classification on LENS dataset format.
-    
-    Original: Anchor-based graph learning for survival prediction
-    Adapted: 3-class classification (normal=0, luad=1, lscc=2)
+    GraphLSurv adapted for 3-class classification.
     """
     
     def __init__(self, 
                  input_dim: int = 1024,
                  hidden_dim: int = 256, 
-                 num_classes: int = 3,  # normal, luad, lscc
+                 num_classes: int = 3,
                  num_layers: int = 1,
                  dropout: float = 0.2,
                  # GraphLearner parameters
@@ -254,7 +250,7 @@ class GraphLSurv(torch.nn.Module):
                 self.net_glearners.append(AnchorGraphLearner(hidden_dim, **args_glearner))
                 self.net_encoders.append(AnchorGCN(hidden_dim, hidden_dim, **args_gencoder))
 
-        # Classification head (adapted from survival to 3-class classification)
+        # Classification head
         self.classifier = nn.Sequential(
             nn.Linear(self.hidden_dim * 2, self.hidden_dim),
             nn.ReLU(),
@@ -265,15 +261,7 @@ class GraphLSurv(torch.nn.Module):
         )
 
     def forward(self, sample):
-        """
-        Forward pass adapted for LENS dataset format.
-        
-        Args:
-            sample: Dictionary containing 'image' (features) and 'adj_s' (adjacency matrix)
-        
-        Returns:
-            logits: Classification logits for 3 classes
-        """
+        """Forward pass for GraphLSurv."""
         features = sample['image']  # [num_nodes, feature_dim]
         adj_matrix = sample['adj_s']  # [num_nodes, num_nodes]
         
@@ -328,8 +316,22 @@ class GraphLSurv(torch.nn.Module):
         return r_inv_sqrt.unsqueeze(2) * mx * r_inv_sqrt.unsqueeze(1)
 
     def get_edge_retention_rate(self, sample):
-        """
-        Calculate edge retention rate for efficiency analysis.
-        GraphLSurv uses conservative anchor-based selection (~55% retention).
-        """
-        return 0.55  # 55% retention as mentioned in the paper
+        """Calculate edge retention rate based on actual anchor selection."""
+        features = sample['image']
+        adj_matrix = sample['adj_s']
+        
+        # Create node mask
+        num_nodes = features.size(0)
+        node_mask = torch.ones(num_nodes, dtype=torch.bool, device=features.device)
+        
+        # Run through first graph learner to get actual retention
+        with torch.no_grad():
+            net_glearner = self.net_glearners[0]
+            node_anchor_adj, _, _, _ = net_glearner(features, node_mask)
+            
+            # Calculate actual edge retention
+            total_possible = adj_matrix.numel()
+            retained_edges = torch.sum(node_anchor_adj > net_glearner.epsilon).item()
+            retention_rate = retained_edges / total_possible
+            
+        return retention_rate
