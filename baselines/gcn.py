@@ -70,7 +70,3 @@ class GCN(nn.Module):
         # Classification
         logits = self.classifier(graph_representation)
         return logits
-    
-    def get_edge_retention_rate(self, sample):
-        """GCN uses full connectivity (100% retention)."""
-        return 1.0
