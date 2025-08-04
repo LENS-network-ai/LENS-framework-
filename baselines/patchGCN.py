@@ -1,6 +1,6 @@
 """
 PatchGCN and DeepGraphConv baseline models adapted for 3-class classification.
-Adapted from original survival prediction models to work with LENS dataset structure.
+
 """
 
 import torch
@@ -141,10 +141,6 @@ class PatchGCN(nn.Module):
         logits = self.classifier(h)
         
         return logits
-    
-    def get_edge_retention_rate(self, sample):
-        """Patch-GCN uses full connectivity (100% retention)."""
-        return 1.0
 
 
 class DeepGraphConv(nn.Module):
@@ -234,7 +230,3 @@ class DeepGraphConv(nn.Module):
         logits = self.classifier(h_path)
         
         return logits
-    
-    def get_edge_retention_rate(self, sample):
-        """DeepGraphConv uses full connectivity (100% retention)."""
-        return 1.0
