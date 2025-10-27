@@ -5,7 +5,7 @@ class EdgeWeightedAttentionPooling:
     def __init__(self):
         """Initialize the edge-weighted attention pooling module"""
         pass
-
+    
     def edge_weighted_attention_pooling(self, node_feat, edge_weights, adj_matrix, masks=None):
         """
         Edge-weighted attention pooling that uses edge importance to generate node attention scores.
@@ -35,15 +35,11 @@ class EdgeWeightedAttentionPooling:
                 continue
             
             # Calculate node importance based on their edge weights
-            # Sum incoming and outgoing edges
             edge_mask = (adj_matrix[b] > 0).float()
             
-            # Weighted degree (sum of incoming + outgoing weighted edges)
-            incoming_importance = torch.sum(edge_weights[b, :, valid_indices] * edge_mask[:, valid_indices], dim=0)
-            outgoing_importance = torch.sum(edge_weights[b, valid_indices, :] * edge_mask[valid_indices, :], dim=1)
-            
-            # Combined node importance (can be adjusted with different formulations)
-            node_importance = incoming_importance + outgoing_importance
+            # For undirected graphs, only count edges once (use incoming OR outgoing, not both)
+            # Weighted degree: sum of all weighted edges connected to each node
+            node_importance = torch.sum(edge_weights[b, :, valid_indices] * edge_mask[:, valid_indices], dim=0)
             
             # Apply softmax to get attention weights
             if torch.sum(node_importance) > 0:
