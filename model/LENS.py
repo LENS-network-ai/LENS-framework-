@@ -33,7 +33,7 @@ class ImprovedEdgeGNN(nn.Module):
         self.conv = nn.Linear(feature_dim, hidden_dim)
         #classifier 
         self.classifier = nn.Sequential(
-         spectral_norm(nn.Linear(hidden_dim, hidden_dim // 2)),
+         nn.Linear(hidden_dim, hidden_dim // 2),
          nn.ReLU(),
          nn.LayerNorm(hidden_dim // 2),
          spectral_norm(nn.Linear(hidden_dim // 2, num_classes))
