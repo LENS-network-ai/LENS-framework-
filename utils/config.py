@@ -73,5 +73,7 @@ def get_parser():
     # Analysis parameters
     parser.add_argument('--detailed-analysis', action='store_true',
                         help='Enable more frequent detailed graph analysis (may slow training)')
-    
+    parser.add_argument('--l0_method', type=str, default='hard-concrete',
+                   choices=['hard-concrete', 'arm'])
+    parser.add_argument('--baseline_ema', type=float, default=0.9)
     return parser
