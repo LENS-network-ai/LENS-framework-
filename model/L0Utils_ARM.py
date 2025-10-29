@@ -12,16 +12,14 @@ import numpy as np
 class ARML0RegularizerParams:
     """Parameters for ARM-based L0 regularization"""
     
-    def __init__(self, gamma=-0.1, zeta=1.1, baseline_ema=0.9, eps=1e-20):
+    def __init__(self, baseline_ema=0.9, eps=1e-20):
         """
         Args:
-            gamma: Lower stretch bound (same as Hard-Concrete)
-            zeta: Upper stretch bound (same as Hard-Concrete)
+            ]
             baseline_ema: Exponential moving average coefficient for baseline
             eps: Small constant for numerical stability
         """
-        self.gamma = gamma
-        self.zeta = zeta
+        
         self.baseline_ema = baseline_ema
         self.eps = eps
         
