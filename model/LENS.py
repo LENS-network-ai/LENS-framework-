@@ -71,8 +71,7 @@ class ImprovedEdgeGNN(nn.Module):
                 
             elif l0_method == 'arm':
                 self.l0_params = ARML0RegularizerParams(
-                    gamma=l0_gamma,
-                    zeta=l0_zeta,
+                  
                     baseline_ema=baseline_ema
                 )
                 print(f"[LENS] Using ARM L0 regularization")
