@@ -79,7 +79,7 @@ class EdgeScoringNetwork(nn.Module):
         # Apply L0 gating based on method
         if self.l0_method == 'hard-concrete':
             if training:
-                edge_weights = self.l0_train_fn(logAlpha, params=self.l0_params)
+                edge_weights = self.l0_train_fn(logAlpha, params=self.l0_params,temperature=temperature)
             else:
                 edge_weights = self.l0_test_fn(logAlpha, params=self.l0_params)
             
