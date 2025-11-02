@@ -45,6 +45,20 @@ class EdgeScoringNetwork(nn.Module):
         for m in self.edge_mlp:
             if isinstance(m, nn.Linear):
                 nn.init.kaiming_normal_(m.weight)
+
+        # ============================================================
+        # CRITICAL FIX: Positive bias initialization for logAlpha
+        # ============================================================
+        # Get final layer (unwrap spectral_norm if needed)
+        final_module = self.edge_mlp[-1]
+        final_layer = final_module.module if hasattr(final_module, 'module') else final_module
+
+        # Set positive bias → logAlpha starts positive → gates start open
+        nn.init.constant_(final_layer.bias, 1.0)
+        nn.init.xavier_uniform_(final_layer.weight, gain=0.1)
+
+        print("[EdgeScoring] ✅ Initialized with positive bias (gates start ~73% open)")
+        # ============================================================
     
     def compute_edge_weights(self, node_feat, adj_matrix, training=True, 
                             regularizer=None, **kwargs):
@@ -75,7 +89,13 @@ class EdgeScoringNetwork(nn.Module):
         
         # Compute logAlpha (edge logits)
         logAlpha = self.edge_mlp(edge_features).squeeze(-1)
-        
+        if not hasattr(self, '_checked'):
+            print(f"\n🔍 LogAlpha Check: mean={logAlpha.mean():.4f}, "f"range=[{logAlpha.min():.4f}, {logAlpha.max():.4f}]")
+            if logAlpha.mean() > 0:
+               print("   ✅ POSITIVE - Fixed!")
+            else:
+               print("   ⚠️ Still negative - check initialization")
+            self._checked = True
         # Apply L0 gating based on method
         if self.l0_method == 'hard-concrete':
             if training:
